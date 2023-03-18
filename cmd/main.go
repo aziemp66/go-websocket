@@ -26,7 +26,7 @@ func main() {
 
 	router.HTMLRender = viewEngine
 
-	router.Static("/static", "web/static")
+	router.Static("/assets", "./web/static/assets")
 
 	chatGroup := router.Group("/")
 	chatDlv.NewChatDelivery(chatGroup)
