@@ -1,7 +1,11 @@
 package main
 
 import (
+	"log"
+	"net/http"
+
 	chatDlv "github.com/aziemp66/go-websocket/internal/delivery/chat"
+
 	"github.com/foolin/goview"
 	"github.com/foolin/goview/supports/ginview"
 
@@ -26,10 +30,12 @@ func main() {
 
 	router.HTMLRender = viewEngine
 
-	router.Static("/assets", "./web/static/assets")
+	router.StaticFS("/public", http.Dir("web/public"))
 
 	chatGroup := router.Group("/")
 	chatDlv.NewChatDelivery(chatGroup)
 
-	router.Run(":8080")
+	if err := router.Run(":8080"); err != nil {
+		log.Fatalf("router listen error: %s\n", err)
+	}
 }
