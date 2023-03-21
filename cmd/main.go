@@ -6,6 +6,8 @@ import (
 
 	chatDlv "github.com/aziemp66/go-websocket/internal/delivery/chat"
 
+	wsCommon "github.com/aziemp66/go-websocket/common/websocket"
+
 	"github.com/foolin/goview"
 	"github.com/foolin/goview/supports/ginview"
 
@@ -29,6 +31,9 @@ func main() {
 	viewEngine := ginview.New(goViewConfig)
 
 	router.HTMLRender = viewEngine
+
+	// serving websocket
+	router.GET("/websocket", wsCommon.WebsocketHandler)
 
 	router.StaticFS("/public", http.Dir("web/public"))
 
