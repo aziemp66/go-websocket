@@ -9,5 +9,15 @@ document.addEventListener('DOMContentLoaded', () => {
 		console.log('Connected to websocket')
 	}
 
+	socket.onclose = () => {
+		console.log('Disconnected from websocket')
+	}
 
+	socket.onerror = (error) => {
+		console.log('Error: ', error)
+	}
+
+	socket.onmessage = (msg) => {
+		console.log('Message: ', msg)
+	}
 })
