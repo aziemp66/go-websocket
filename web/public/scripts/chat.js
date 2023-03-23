@@ -1,5 +1,14 @@
 const socket = new WebSocket('ws://127.0.0.1:8080/websocket')
 
+window.onbeforeunload = () => { 
+	console.log("Leaving page");
+	let jsonData = {}
+
+	jsonData.action = "left"
+
+	socket.send(JSON.stringify(jsonData))
+}
+
 console.log('Loaded chat.js');
 
 document.addEventListener('DOMContentLoaded', () => {
