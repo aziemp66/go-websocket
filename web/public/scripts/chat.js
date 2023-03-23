@@ -19,5 +19,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	socket.onmessage = (msg) => {
 		console.log('Message: ', msg)
+
+		const data = JSON.parse(msg.data)
+
+		console.log('Data: ', data);
 	}
 })

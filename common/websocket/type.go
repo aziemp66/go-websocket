@@ -7,12 +7,14 @@ type (
 		*websocket.Conn
 	}
 
+	// WsJsonResponse defines the response sent back from websocket
 	WsJsonResponse struct {
 		Action      string `json:"action"`
 		Message     string `json:"message"`
 		MessageType string `json:"message_type"`
 	}
 
+	// WsPayload defines the websocket request from the client
 	WsPayload struct {
 		Action   string              `json:"action"`
 		Username string              `json:"username"`

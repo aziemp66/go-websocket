@@ -33,12 +33,14 @@ func main() {
 	router.HTMLRender = viewEngine
 
 	// serving websocket
-	router.GET("/websocket", wsCommon.WebsocketHandler)
+	router.GET("/websocket", wsCommon.WsEndpoint)
 
 	router.StaticFS("/public", http.Dir("web/public"))
 
 	chatGroup := router.Group("/")
 	chatDlv.NewChatDelivery(chatGroup)
+
+	go wsCommon.ListenToWsChannel()
 
 	if err := router.Run(":8080"); err != nil {
 		log.Fatalf("router listen error: %s\n", err)
