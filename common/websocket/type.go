@@ -9,9 +9,10 @@ type (
 
 	// WsJsonResponse defines the response sent back from websocket
 	WsJsonResponse struct {
-		Action      string `json:"action"`
-		Message     string `json:"message"`
-		MessageType string `json:"message_type"`
+		Action         string   `json:"action"`
+		Message        string   `json:"message"`
+		MessageType    string   `json:"message_type"`
+		ConnectedUsers []string `json:"connected_users"`
 	}
 
 	// WsPayload defines the websocket request from the client

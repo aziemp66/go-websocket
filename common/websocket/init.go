@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"sort"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
@@ -70,10 +71,30 @@ func ListenToWsChannel() {
 	for {
 		e := <-wsChan
 
-		response.Action = "Got here"
-		response.Message = fmt.Sprintf("Some message, and action was %s", e.Action)
-		broadcastToAll(response)
+		// response.Action = "Got here"
+		// response.Message = fmt.Sprintf("Some message, and action was %s", e.Action)
+		// broadcastToAll(response)
+
+		switch e.Action {
+		case "username":
+			// get a list of all users
+			clients[e.Conn] = e.Username
+			users := getUserList()
+			response.Action = "list_users"
+			response.ConnectedUsers = users
+			broadcastToAll(response)
+		}
 	}
+}
+
+func getUserList() []string {
+	var userList []string
+
+	for _, x := range clients {
+		userList = append(userList, x)
+	}
+	sort.Strings(userList)
+	return userList
 }
 
 func broadcastToAll(response WsJsonResponse) {

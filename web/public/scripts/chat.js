@@ -1,10 +1,8 @@
-let socket = null
+const socket = new WebSocket('ws://127.0.0.1:8080/websocket')
 
 console.log('Loaded chat.js');
 
 document.addEventListener('DOMContentLoaded', () => {
-	socket = new WebSocket('ws://127.0.0.1:8080/websocket')
-
 	socket.onopen = () => {
 		console.log('Connected to websocket')
 	}
@@ -18,10 +16,39 @@ document.addEventListener('DOMContentLoaded', () => {
 	}
 
 	socket.onmessage = (msg) => {
-		console.log('Message: ', msg)
+		// console.log('Message: ', msg)
+		// const data = JSON.parse(msg.data)
+		// console.log('Data: ', data);
 
 		const data = JSON.parse(msg.data)
+		console.log("Action: ", data.action);
 
-		console.log('Data: ', data);
+		switch (data.action) {
+			case "list_users":
+				let ul = document.getElementById("online_users")
+				while (ul.firstChild) {
+					ul.removeChild(ul.firstChild)
+				}
+
+				if (data.connected_users.length > 0) {
+					data.connected_users.forEach((user) => { 
+						const li = document.createElement("li")
+						li.appendChild(document.createTextNode(user))
+						ul.appendChild(li)
+					})
+				}
+		}
 	}
+
+	let usernameInput = document.getElementById("username")
+
+	usernameInput.addEventListener("change", (e) => {
+		let jsonData = {}
+
+		jsonData.action = "username"
+		jsonData.username = e.target.value
+		
+		socket.send(JSON.stringify(jsonData))
+	})
 })
+
