@@ -1,5 +1,9 @@
 const socket = new WebSocket('ws://127.0.0.1:8080/websocket')
 
+let o = document.getElementById("output")
+let userField = document.getElementById("username")
+let messageField = document.getElementById("message")
+
 window.onbeforeunload = () => { 
 	console.log("Leaving page");
 	let jsonData = {}
@@ -46,6 +50,8 @@ document.addEventListener('DOMContentLoaded', () => {
 						ul.appendChild(li)
 					})
 				}
+			case "broadcast":
+				o.innerHTML = o.innerHTML + data.message + "<br>"
 		}
 	}
 
@@ -59,5 +65,35 @@ document.addEventListener('DOMContentLoaded', () => {
 		
 		socket.send(JSON.stringify(jsonData))
 	})
+
+	document.getElementById("message").addEventListener("keydown", (e) => { 
+		if (e.code == "Enter" && (e.target.value != "" && userField.value != "")) {
+			if (!socket) {
+				console.log("No socket connection")
+				return false
+			}
+			e.preventDefault()
+			e.stopPropagation
+			sendMessage()
+		}
+	})
+
+	document.getElementById("sendBtn").addEventListener("click", (e) => {
+		if ((userField.value === "") || (messageField.value === "")) {
+			alert("No username or message")
+			return false
+		} else {
+			sendMessage()
+		}
+	})
 })
 
+function sendMessage() {
+	let jsonData = {}
+
+	jsonData.action = "broadcast"
+	jsonData.username = userField.value
+	jsonData.message = messageField.value
+
+	socket.send(JSON.stringify(jsonData))
+}
