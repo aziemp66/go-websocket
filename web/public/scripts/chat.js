@@ -1,8 +1,10 @@
-const socket = new WebSocket('ws://127.0.0.1:8080/websocket')
-
+let socket = null 
 let o = document.getElementById("output")
 let userField = document.getElementById("username")
 let messageField = document.getElementById("message")
+
+let socketInput = document.getElementById("socket_input")
+let socketButton = document.getElementById("socket_button")
 
 window.onbeforeunload = () => { 
 	console.log("Leaving page");
@@ -13,9 +15,9 @@ window.onbeforeunload = () => {
 	socket.send(JSON.stringify(jsonData))
 }
 
-console.log('Loaded chat.js');
+socketButton.addEventListener("click", (e) => { 
+	socket = new WebSocket("ws://localhost:8080/ws/" + socketInput.value)
 
-document.addEventListener('DOMContentLoaded', () => {
 	socket.onopen = () => {
 		console.log('Connected to websocket')
 	}
@@ -86,6 +88,10 @@ document.addEventListener('DOMContentLoaded', () => {
 			sendMessage()
 		}
 	})
+})
+
+document.addEventListener('DOMContentLoaded', () => {
+	
 })
 
 function sendMessage() {

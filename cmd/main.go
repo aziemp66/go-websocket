@@ -33,7 +33,7 @@ func main() {
 	router.HTMLRender = viewEngine
 
 	// serving websocket
-	router.GET("/websocket", wsCommon.WsEndpoint)
+	router.GET("/ws/:id", wsCommon.WsEndpoint)
 
 	router.StaticFS("/public", http.Dir("web/public"))
 
